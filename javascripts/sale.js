@@ -49,20 +49,28 @@ function subtotal() {
 }
 
 function calc() {
-    const sum = subtotal();
-    const postage = calcPostageFromPurchase(sum);
-    window.alert(`El subtotal es ${sum} yenes. El envío es ${postage} yenes. El total es ${sum + postage} yenes`);
+    let message = "Productos agregados:\n";
+    let subtotal = 0;
+    for (let i = 0; i < purchases.length; i++) {
+        const item = purchases[i];
+        message += `${item.name} (${item.price} yenes): ${item.cantidad} unidad/es\n`;
+        subtotal += item.price * item.cantidad;
+    }
+    const postage = calculatePostage(subtotal);
+    const total = subtotal + postage;
+    message += `\nSubtotal: ${subtotal} yenes\nGastos de envío: ${postage} yenes\n\nTotal: ${total} yenes`;
+    window.alert(message);
     purchases = [];
     priceElement.value= "";
     numberElement.value = "";
 }
 
-function calcPostageFromPurchase(sum) {
-    if (sum == 0 || sum >= 3000) {
-    return 0;
-    } else if (sum < 2000){
-    return 500;
+function calculatePostage(subtotal) {
+    if (subtotal == 0 || subtotal >= 3000) {
+        return 0;
+    } else if (subtotal < 2000) {
+        return 500;
     } else {
-    return 250;
+        return 250;
     }
 }
